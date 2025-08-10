@@ -1,5 +1,23 @@
 # ideal-disco
 Personal ideal-disco
+
+Login + Task Module + One-click Start + Basic Monitoring/Log
+
+Using React + JS + Tailwind（Frontend） + Django / DRF（Backend）
+
+```
+personal-hub/
+├─ apps/
+│  ├─ api/                 # Django + DRF
+│  └─ web/                 # React + Tailwind
+├─ infra/
+│  └─ docker-compose.yml   # Postgres + Backend + Frontend
+├─ scripts/
+│  ├─ dev.sh               # Start Project（Dev）
+│  └─ seed.sh              # Data Create（Optional）
+└─ README.md
+```
+
 # Multi-Feature Web Application
 
 This project aims to combine multiple useful tools into one unified platform, offering seamless integration, centralized user management, and efficient data storage.
