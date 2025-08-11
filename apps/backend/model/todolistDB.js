@@ -1,0 +1,30 @@
+const mongoose = require('mongoose').set("strictQuery",true)
+const url = process.env.MONGODBURL
+console.log('connecting to', url)
+mongoose.connect(url)
+.then((result) => {
+    console.log(`Data base has been connected, url:${url}`)
+}).catch((error) =>{
+    console.log(error)
+})
+
+const todoSchema = new mongoose.Schema({
+    uuid:String,
+    content:String,
+    id: Number,
+    createDate:String,
+    lastModify:String,
+    finish:Boolean,
+    category:[String],
+    userId:Number
+})
+
+todoSchema.set('toJSON',{
+    transform:(document, returnedObject) => {
+        // returnedObject.id = returnedObject._id.toString()
+        delete returnedObject._id
+        delete returnedObject.__v
+    }
+})
+
+module.exports = mongoose.model('todolistdb',todoSchema)
