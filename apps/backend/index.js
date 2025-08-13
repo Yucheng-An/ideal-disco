@@ -1,8 +1,14 @@
 require('dotenv').config()
 const express = require('express');
+const cors = require('cors')
 const todolistDB = require('./model/todolistDB.js')
 const app = express();
-app.use(express.json())
+app.use(cors({
+    origin:"http://localhost:5173",
+    credential:false
+}))
+
+
 
 app.get('/',(request, response) =>{
     response.status(200).send('<h1>This is get root directory from ideal-disco!</h1>')
