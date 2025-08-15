@@ -5,7 +5,6 @@
 *.egg-info/
 *.local
 *.log
-*.log
 *.manifest
 *.mo
 *.njsproj
@@ -100,7 +99,6 @@ marimo/_static/
 next-env.d.ts
 node_modules/
 nosetests.xml
-npm-debug.log*
 npm-debug.log*
 parts/
 pip-delete-this-directory.txt
