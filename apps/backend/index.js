@@ -4,51 +4,49 @@ const cors = require('cors')
 const todolistDB = require('./model/todolistDB.js')
 const app = express();
 app.use(cors({
-    origin:"http://localhost:5173",
-    credential:false
+    origin: "http://localhost:5173",
+    credential: false
 }))
+app.use(express.json())
 
 
-
-app.get('/',(request, response) =>{
+app.get('/', (request, response) => {
     response.status(200).send('<h1>This is get root directory from ideal-disco!</h1>')
 })
-app.get('/api/todolist', (request,response) => {
-    todolistDB.find({}).then(list =>{
-        response.json(list)
-    })
+app.get('/api/todolist', async (request, response) => {
+    const todoList = await todolistDB.find({})
+    response.json(todoList)
 })
 app.get('/api/todolist/:userId', async (request, response) => {
     const inputId = Number(request.params.userId);   // path param     // query param
-     if (Number.isNaN(inputId)) {
-            return response.status(400).json({ error: 'Invalid userId' });
-        }
-     const todos = await todolistDB.find({userId : inputId});
-     response.json(todos);
+    if (Number.isNaN(inputId)) {
+        return response.status(400).json({error: 'Invalid userId'});
+    }
+    const todos = await todolistDB.find({userId: inputId});
+    response.json(todos);
 
 });
-
 app.post('/api/todolist', async (request, response) => {
     try {
         const body = request.body;
-        if (body.content === undefined) {
-            return response.status(400).json({ error: "content missing" });
+        if (body === undefined) {
+            return response.status(400).json({error: "content missing"});
         }
         const todo = new todolistDB({
-            uuid: body.uuid,
+            uuid: crypto.randomUUID(),
             content: body.content,
-            id: body.id,
-            createDate: body.createDate,
-            lastModify: body.lastModify,
-            finish: Boolean(body.finish),
-            category: body.category,
+            createDate: new Date().toISOString(),
+            lastModify: new Date().toISOString(),
+            finish: false,
+            category: [],
+            id: 1,
             userId: body.userId
         });
-        const savedItem = await todo.save();
-        response.json(savedItem);
+        const savedItem = await todolistDB.insertOne(todo)
+        response.status(200).json(savedItem);
     } catch (error) {
         console.log(error);
-        response.status(500).json({ error: "Server error" });
+        response.status(500).json({error: "index.js error"});
     }
 });
 
