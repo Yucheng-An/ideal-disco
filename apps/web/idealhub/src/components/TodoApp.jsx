@@ -28,13 +28,11 @@ function TodoApp() {
             await fetchTodos();
         }
     };
-    const deleteTodo = async (uuid) => {
-        const data = {userId: userId, uuid: uuid};
-        console.log(data);
-    }
     const toggleTodo = async (uuid) => {
-        const data = {userId: userId, uuid: uuid};
-        console.log(data);
+        console.log(uuid);
+    }
+    const deleteTodo = async (uuid) => {
+        console.log(uuid);
     }
 
     return (
