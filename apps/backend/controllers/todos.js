@@ -36,7 +36,7 @@ async function createTodo(request, response, next) {
             content: body.content,
             createDate: now,
             lastModify: now,
-            finish: false,
+            finished: false,
             category: [],
             id: 1,               // remove if not used
             userId: body.userId,
@@ -52,30 +52,30 @@ async function createTodo(request, response, next) {
 // Need finish
 async function updateFinish(request, response, next) {
     try {
-        const uuid = request.params;
-        const finish = request.body;
-        if (typeof finish !== 'boolean') {
-            return response.status(400).json({error: 'finish must be boolean'});
+        const {uuid} = request.params;
+        const todo = await todolistDB.findOne({uuid})
+        if (!todo) {
+            return response.status(400).json({error: "Todo not found"})
         }
-        const result = await todolistDB.updateOne(
+        const updatedTodo = await todolistDB.updateOne(
             {uuid},
-            {$set: {finish, lastModify: new Date().toISOString()}}
-        );
-        if (!result || result.matchedCount === 0) {
-            return response.status(404).json({error: 'Todo not found'});
-        }
-
-        response.json({status: true});
+            {
+                $set: {
+                    finished: !todo.finished,
+                    lastModify: new Date().toISOString()
+                }
+            }
+        )
+        return response.status(201).json(updatedTodo);
     } catch (error) {
         next(error);
     }
 }
 
-// Need finish
 async function deleteTodo(request, response, next) {
     try {
-        const uuid = request.params;
-        const result = await todolistDB.deleteOne(uuid);
+        const {uuid} = request.params;
+        const result = await todolistDB.deleteOne({uuid: uuid});
         if (!result || result.deletedCount === 0) {
             return response.status(404).json({error: 'Todo not found'});
         }

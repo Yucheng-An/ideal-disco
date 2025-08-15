@@ -10,20 +10,17 @@ function TodoListDisplay({todoList, onToggle, onDelete}) {
                     key={t.uuid}
                     className="flex items-center gap-3 p-2 border rounded-md"
                 >
-                    {/* Checkbox for finished/unfinished */}
                     <input
                         type="checkbox"
-                        checked={t.completed ?? false} // adjust key if your API uses different name
+                        checked={t.finished ?? true}
                         onChange={() => onToggle(t.uuid)}
                         className="w-5 h-5"
                     />
 
-                    {/* Todo text */}
                     <span className={t.finished ? "line-through text-gray-400" : ""}>
                         {t.content}
                     </span>
 
-                    {/* Delete button */}
                     <button
                         onClick={() => onDelete(t.uuid)}
                         className="ml-auto bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"

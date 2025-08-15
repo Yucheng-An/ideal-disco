@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {getAll, createTodo} from "../services/todoListApi.js";
+import {getAll, createTodo, convertFinish, deleteOneTodo} from "../services/todoListApi.js";
 import TodoListDisplay from "./TodoListDisplay";
 
 const USERID = 1;
@@ -15,7 +15,10 @@ function TodoApp() {
 
     const fetchTodos = async () => {
         const res = await getAll(userId);
-        setTodoList(res.data);
+        const sorted = [...res.data].sort((a, b) =>
+            new Date(b.createDate) - new Date(a.createDate)
+        );
+        setTodoList(sorted);
     };
 
     const addToDo = async (e) => {
@@ -29,10 +32,13 @@ function TodoApp() {
         }
     };
     const toggleTodo = async (uuid) => {
-        console.log(uuid);
+        await convertFinish(uuid);
+        await fetchTodos();
+
     }
     const deleteTodo = async (uuid) => {
-        console.log(uuid);
+        await deleteOneTodo(uuid)
+        await fetchTodos();
     }
 
     return (

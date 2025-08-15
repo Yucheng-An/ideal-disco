@@ -14,8 +14,16 @@ export const createTodo = async (data) => {
     }
 }
 export const convertFinish = async (data) => {
-    const response = await axios.patch(baseUrl, data, {headers: {'Content-Type': 'application/json'}})
+    const response = await axios.patch(`${baseUrl}/${encodeURIComponent(data)}`)
     return {
-        status: true
+        status: true,
+        data: response.data
+    }
+}
+export const deleteOneTodo = async (data) => {
+    const response = await axios.delete(`${baseUrl}/${encodeURIComponent(data)}`)
+    return {
+        status: true,
+        data: response.data
     }
 }
