@@ -4,12 +4,12 @@ Personal ideal-disco
 
 Login + Task Module + One-click Start + Basic Monitoring/Log
 
-Using React + JS + Tailwind（Frontend） + Django / DRF（Backend）
+Using React + JS + Tailwind（Frontend） + Express
 
 ```
 personal-hub/
 ├─ apps/
-│ ├─ api/ # Express + RESTful API backend
+│ ├─ backend/ # Express + RESTful API
 │ └─ web/ # React + Tailwind frontend
 ├─ infra/
 │ └─ docker-compose.yml # MongoDB + Backend + Frontend services
@@ -26,9 +26,14 @@ user management, and efficient data storage.
 
 ## Features
 
-### 1. Task Management / To-Do App
+### 0. Login
 
 - User registration & login (JWT or Session-based authentication)
+
+---
+
+### 1. Task Management / To-Do App
+
 - Add, edit, delete tasks
 - Filter tasks by status (Incomplete / Completed)
 - Persistent storage in database
@@ -37,7 +42,6 @@ user management, and efficient data storage.
 
 ### 2. Notes App
 
-- User registration & login
 - Create, edit, and delete notes (Rich text editor supported)
 - Categorize and tag notes
 - Search notes by tags or categories
@@ -48,8 +52,6 @@ user management, and efficient data storage.
 
 ### 3. Weather + To-Do Integration
 
-- User login
-- To-Do task management (same as Task Management module)
 - Weather information via **OpenWeather API**
 - Store user’s tasks and city preferences in database
 
@@ -94,12 +96,12 @@ user management, and efficient data storage.
 
 ---
 
-## Tech Stack (Suggested)
+## Tech Stack
 
 - **Frontend**: React + Tailwind CSS
-- **Backend**: Django / FastAPI / Node.js (Express or NestJS)
-- **Database**: PostgreSQL / MySQL / MongoDB
-- **Authentication**: JWT / Session-based
+- **Backend**: Express / Node.js (Express or NestJS)
+- **Database**: MongoDB
+- **Authentication**: JWT or Session-based
 - **File Storage**: Amazon S3 / Local file system
 - **APIs**: OpenWeather API, Currency Exchange API
 - **Real-time**: Socket.IO / WebSocket
@@ -108,6 +110,7 @@ user management, and efficient data storage.
 
 ## Project Goals
 
+- Learn something!
 - Build modular, reusable components for each feature
 - Centralize authentication and user data management
 - Optimize for scalability and maintainability

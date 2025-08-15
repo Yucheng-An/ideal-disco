@@ -3,10 +3,7 @@ const express = require('express')
 const cors = require('cors')
 const todosRouter = require('./routes/todos')
 const app = express()
-app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: false,
-}));
+app.use(cors());//Anywhere!!!
 app.use(express.json());
 app.get('/', (req, res) => {
     res.status(200).send('<h1>This is get root directory from ideal-disco!</h1>');
