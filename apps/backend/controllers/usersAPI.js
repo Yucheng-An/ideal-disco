@@ -1,8 +1,6 @@
 const userlistDB = require('../models/User.js');
 const bcrypt = require("bcrypt");
-// const User = require("../models/User");
 const crypto = require("crypto");
-
 
 async function getAllUsers(request, response, next) {
     try {
@@ -18,20 +16,18 @@ async function createUser(request, response, next) {
         console.log(request.body);
         const body = request.body;
         const saltRounds = 10;
-        const passwordHash = await bcrypt.hash(body.password, saltRounds);
-        const user = {
+        const newUser = {
             uuid: body.uuid || crypto.randomUUID(),
             username: body.username,
             name: body.name,
-            passwordHash: passwordHash,
+            passwordHash: await bcrypt.hash(body.password, saltRounds),
         };
-        const savedUser = await userlistDB.create(user);
+        const savedUser = await userlistDB.create(newUser);
         response.status(201).json(savedUser);
     } catch (error) {
         next(error);
     }
 }
-
 
 module.exports = {
     getAllUsers,

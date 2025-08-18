@@ -48,7 +48,6 @@ async function createTodo(request, response, next) {
     }
 }
 
-// Need finish
 async function updateFinish(request, response, next) {
     try {
         const {uuid} = request.params;
