@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const todolistDB = require('../model/todolistDB');
+const todolistDB = require('../models/Todo');
 
 async function getAllTodos(request, response, next) {
     try {
@@ -41,7 +41,6 @@ async function createTodo(request, response, next) {
             id: 1,               // remove if not used
             userId: body.userId,
         };
-
         const savedItem = await todolistDB.create(todo);
         response.status(200).json(savedItem);
     } catch (error) {

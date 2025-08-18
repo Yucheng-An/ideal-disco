@@ -6,7 +6,8 @@ const {
     createTodo,
     updateFinish,
     deleteTodo
-} = require('../controllers/todos');
+} = require('../controllers/todosAPI');
+
 router.get('/', getAllTodos);
 router.get('/:userId', getTodosByUser);
 router.post('/', createTodo);
