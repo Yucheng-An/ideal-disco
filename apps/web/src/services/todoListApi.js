@@ -2,9 +2,8 @@ import axios from 'axios'
 
 const baseUrl = 'http://localhost:3000/api/todolist'
 
-export const getAll = async (id) => {
-    const url = `${baseUrl}/${id}`
-    return await axios.get(url)
+export const getAll = async () => {
+    return await axios.get(baseUrl)
 }
 export const createTodo = async (data) => {
     const response = await axios.post(baseUrl, data, {headers: {'Content-Type': 'application/json'}})

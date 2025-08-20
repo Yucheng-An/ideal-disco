@@ -7,14 +7,14 @@ const USERID = 1;
 function TodoApp() {
     const [todoList, setTodoList] = useState([]);
     const [newTodo, setNewTodo] = useState("");
-    const [userId, setUserId] = useState(USERID);
+    const [user, setUser] = useState(USERID);
 
     useEffect(() => {
         fetchTodos();
     }, []);
 
     const fetchTodos = async () => {
-        const res = await getAll(userId);
+        const res = await getAll(user);
         const sorted = [...res.data].sort((a, b) =>
             new Date(b.createDate) - new Date(a.createDate)
         );
@@ -24,7 +24,7 @@ function TodoApp() {
     const addToDo = async (e) => {
         e.preventDefault();
         if (!newTodo.trim()) return;
-        const payload = {userId: userId, content: newTodo.trim()};
+        const payload = {content: newTodo.trim()};
         const res = await createTodo(payload);
         if (res?.status === true || res?.status === 200) {
             setNewTodo("");

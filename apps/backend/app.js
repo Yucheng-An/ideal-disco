@@ -1,22 +1,28 @@
-require("dotenv").config();
+const config = require("./utils/config.js")
 const express = require("express");
-const cors = require("cors");
-// Import database connection
-require("./config/dbconfig");
 const app = express();
-app.use(cors()); //Access Anywhere!!!
+const cors = require("cors");
+
+const userRouter = require("./routes/usersRoute");
+const todosRouter = require("./routes/todosRoute");
+const loginRouter = require("./routes/loginRoute");
+
+const middleware = require("./utils/middleware");
+
+app.use(cors());
 app.use(express.json());
-const userRouter = require("./routes/users");
-const todosRouter = require("./routes/todos");
+app.use(express.static("dist"));
+app.use(middleware.requestLogger);
 
 app.use("/api/users", userRouter);
 app.use("/api/todolist", todosRouter);
+app.use("/api/login", loginRouter);
 
-app.get("/", (req, res) => {
-  res.status(200).send("<h1>This is get root directory from ideal-disco!</h1>");
-});
-const PORT = process.env.PORT;
-app.listen(PORT, () => {
-  console.log(`The server is running at port: ${PORT}`);
-  console.log("Address is: localhost:", PORT);
-});
+
+app.use(middleware.unknownEndpoint);
+app.use(middleware.errorHandler);
+
+
+config.ConnectDatabase()
+
+module.exports = app

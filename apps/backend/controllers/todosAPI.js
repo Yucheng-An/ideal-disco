@@ -1,9 +1,19 @@
-const crypto = require('crypto');
-const todolistDB = require('../models/Todo');
+const TodoSchema = require('../models/Todo');
+const UserSchema = require("../models/User");
+const config = require('../utils/config')
+const jwt = require('jsonwebtoken')
+
+const getTokenFrom = request => {
+    const authorization = request.get("Authorization");
+    if (authorization && authorization.startsWith("Bearer ")) {
+        return authorization.replace("Bearer ", "");
+    }
+    return null;
+}
 
 async function getAllTodos(request, response, next) {
     try {
-        const list = await todolistDB.find({});
+        const list = await TodoSchema.find({});
         response.json(list);
     } catch (error) {
         next(error);
@@ -12,11 +22,11 @@ async function getAllTodos(request, response, next) {
 
 async function getTodosByUser(request, response, next) {
     try {
-        const inputId = Number(request.params.userId);
+        const inputId = Number(request.params.user);
         if (Number.isNaN(inputId)) {
             return response.status(400).json({error: 'Invalid userId'});
         }
-        const todos = await todolistDB.find({userId: inputId});
+        const todos = await TodoSchema.find({user: inputId});
         response.json(todos);
     } catch (error) {
         next(error);
@@ -26,22 +36,24 @@ async function getTodosByUser(request, response, next) {
 async function createTodo(request, response, next) {
     try {
         const body = request.body;
-        if (!body || !body.content || body.userId == null) {
-            return response.status(400).json({error: 'content and userId are required'});
+        const decodedToken = jwt.verify(getTokenFrom(request), config.SECRET)
+        if (!decodedToken.id) {
+            return response.status(401).json({error: "token invalid"});
         }
-
+        const user = await UserSchema.findById(decodedToken.id);
+        // const user = await UserSchema.findById(body.userId)
         const now = new Date().toISOString();
-        const todo = {
-            uuid: crypto.randomUUID(),
+        const newTodo = new TodoSchema({
             content: body.content,
             createDate: now,
             lastModify: now,
             finished: false,
             category: [],
-            id: 1,               // remove if not used
-            userId: body.userId,
-        };
-        const savedItem = await todolistDB.create(todo);
+            user: user.id
+        });
+        const savedItem = await TodoSchema.create(newTodo);
+        user.todolist = user.todolist.concat(savedItem.id)
+        user.save()
         response.status(200).json(savedItem);
     } catch (error) {
         next(error);
@@ -51,11 +63,11 @@ async function createTodo(request, response, next) {
 async function updateFinish(request, response, next) {
     try {
         const {uuid} = request.params;
-        const todo = await todolistDB.findOne({uuid})
+        const todo = await TodoSchema.findOne({uuid})
         if (!todo) {
             return response.status(400).json({error: "Todo not found"})
         }
-        const updatedTodo = await todolistDB.updateOne(
+        const updatedTodo = await TodoSchema.updateOne(
             {uuid},
             {
                 $set: {
@@ -73,7 +85,7 @@ async function updateFinish(request, response, next) {
 async function deleteTodo(request, response, next) {
     try {
         const {uuid} = request.params;
-        const result = await todolistDB.deleteOne({uuid: uuid});
+        const result = await TodoSchema.deleteOne({uuid: uuid});
         if (!result || result.deletedCount === 0) {
             return response.status(404).json({error: 'Todo not found'});
         }
