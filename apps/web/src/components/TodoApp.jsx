@@ -4,17 +4,17 @@ import TodoListDisplay from "./TodoListDisplay";
 
 const USERID = 1;
 
-function TodoApp() {
+function TodoApp({user, setUser}) {
     const [todoList, setTodoList] = useState([]);
     const [newTodo, setNewTodo] = useState("");
-    const [user, setUser] = useState(USERID);
 
     useEffect(() => {
         fetchTodos();
+        console.log("user", user)
     }, []);
 
     const fetchTodos = async () => {
-        const res = await getAll(user);
+        const res = await getAll();
         const sorted = [...res.data].sort((a, b) =>
             new Date(b.createDate) - new Date(a.createDate)
         );
